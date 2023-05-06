@@ -159,6 +159,7 @@ export default {
     handleLogin() { // 登录模块
       this.$refs.loginForm.validate(valid => {
         if (valid) {
+          // 预留-调用登录接口，验证成功后进行跳转
           this.loading = true
           this.$store.dispatch('user/login', this.loginForm)
             .then(() => {
