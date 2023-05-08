@@ -1,34 +1,54 @@
 <template>
-  <div style=" margin:0px" class="app-container documentation-container">
+  <div style="margin: 0px" class="app-container documentation-container">
     <el-container>
-      <el-main style=" padding:0px">PIX 收银台</el-main>
-      <el-main style=" padding:0px">
+      <el-main style="padding: 0px">PIX 收银台</el-main>
+      <el-main style="padding: 0px">
         <el-row>
-          <el-col :span="6" style=" padding:10px"><el-select v-model="value" placeholder="有效时间">
-            <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
-          </el-select></el-col>
-          <el-col :span="6" style=" padding:10px"><el-input v-model="pedido" type="text" placeholder="订单(选填)" /></el-col>
-          <el-col :span="6" style=" padding:10px"><el-input v-model="clientName" type="text" placeholder="客人名称(选填)" /></el-col>
+          <el-col :span="6" style="padding: 10px"
+            ><el-select v-model="value" placeholder="有效时间">
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              /> </el-select
+          ></el-col>
+          <el-col :span="6" style="padding: 10px"
+            ><el-input v-model="pedido" type="text" placeholder="订单(选填)"
+          /></el-col>
+          <el-col :span="6" style="padding: 10px"
+            ><el-input
+              v-model="clientName"
+              type="text"
+              placeholder="客人名称(选填)"
+          /></el-col>
         </el-row>
-        <el-row style=" padding:0px">
-          <el-col :span="6" style=" padding:10px"><el-input v-model="input" type="number" placeholder="请输金额" /></el-col>
-          <el-col :span="6" style=" padding:10px"><el-button type="primary" @click="GeraQr">生成收款二维码</el-button></el-col>
+        <el-row style="padding: 0px">
+          <el-col :span="6" style="padding: 10px"
+            ><el-input v-model="input" type="number" placeholder="请输金额"
+          /></el-col>
+          <el-col :span="6" style="padding: 10px"
+            ><el-button type="primary" @click="GeraQr"
+              >生成收款二维码</el-button
+            ></el-col
+          >
+          <el-col :span="6" style="padding: 10px"
+            ><el-button type="primary" @click="test">test</el-button></el-col
+          >
         </el-row>
       </el-main>
       <!-- 二维码区域 -->
-      <el-main v-show="show" style=" padding:0px">
-        <h3 style=" margin:0px">Aguardando pagamento</h3>
+      <el-main v-show="show" style="padding: 0px">
+        <h3 style="margin: 0px">Aguardando pagamento</h3>
         Pagar com Pix é rápido e seguro! É só seguir estes Passos:
 
-        <div style=" text-align:center;margin-top:20px">
+        <div style="text-align: center; margin-top: 20px">
           <el-row>
-            <el-col :span="10" style=" padding:10px;width:500px;height:350px">
-              <el-card :body-style="{ padding: '0px' ,height:'100%'}">
+            <el-col
+              :span="10"
+              style="padding: 10px; width: 500px; height: 350px"
+            >
+              <el-card :body-style="{ padding: '0px', height: '100%' }">
                 <vue-qr
                   :logo-src="logoSrc"
                   :size="250"
@@ -39,18 +59,20 @@
                   color-dark="black"
                   color-light="white"
                 />
-                <div style="padding: 14px;">
+                <div style="padding: 14px">
                   <span>R${{ input }}</span>
                   <div class="bottom clearfix">
                     <time class="time">过期时间：{{ expTime }}</time>
                   </div>
                 </div>
               </el-card>
-
             </el-col>
-            <el-col :span="14" style=" padding:10px;width:500px;height:350px">
-              <el-card :body-style="{ padding: '0px',height:'100%' }">
-                <el-form style="text-align: left;padding:5px;height:100%">
+            <el-col
+              :span="14"
+              style="padding: 10px; width: 500px; height: 350px"
+            >
+              <el-card :body-style="{ padding: '0px', height: '100%' }">
+                <el-form style="text-align: left; padding: 5px; height: 100%">
                   <el-form-item>
                     1.<b>Abra o aplicativo ou Internet Banking </b>para pagar.
                   </el-form-item>
@@ -58,7 +80,8 @@
                     2.Na opção Pix, escolha <b>'Ler QR Code'</b>
                   </el-form-item>
                   <el-form-item>
-                    3.<b>Ler QR Code</b> ou , se preferir, <b>copie o código para Pix Copia e Cola.</b>
+                    3.<b>Ler QR Code</b> ou , se preferir,
+                    <b>copie o código para Pix Copia e Cola.</b>
                   </el-form-item>
                   <el-form-item>
                     3.Revise as informações e <b>confirme o pagamento</b>
@@ -81,83 +104,103 @@
 </template>
 
 <script>
-import VueQr from 'vue-qr'
+import VueQr from "vue-qr";
 
 export default {
-  name: 'Documentation',
+  name: "Documentation",
   components: { VueQr },
   data() {
     return {
-      expTime: '',
-      value: '',
+      expTime: "",
+      value: "",
       show: false,
-      pedido: '',
-      clientName: '',
-      options: [{
-        value: 10,
-        label: '10分钟'
-      }, {
-        value: 30,
-        label: '30分钟'
-      }, {
-        value: 240,
-        label: '4小时'
-      }, {
-        value: 720,
-        label: '12小时'
-      }],
+      pedido: "",
+      clientName: "",
+      options: [
+        {
+          value: 10,
+          label: "10分钟",
+        },
+        {
+          value: 30,
+          label: "30分钟",
+        },
+        {
+          value: 240,
+          label: "4小时",
+        },
+        {
+          value: 720,
+          label: "12小时",
+        },
+      ],
       currentDate: new Date(),
       input: null,
-      logoSrc: '',
-      appSrc: ''
-    }
+      logoSrc: "",
+      appSrc: "",
+    };
   },
   methods: {
-    getZero(num) { // 补0
+    // test方法，打印dispatch中的数据
+    test() {
+      console.log(this.$store.state);
+    },
+    getZero(num) {
+      // 补0
       // 单数前面加0
       if (parseInt(num) < 10) {
-        num = '0' + num
+        num = "0" + num;
       }
-      return num
+      return num;
     },
     clear() {
-      this.appSrc = ''
-      this.input = null
-      this.clientName = ''
-      this.pedido = ''
-      this.show = false
+      this.appSrc = "";
+      this.input = null;
+      this.clientName = "";
+      this.pedido = "";
+      this.show = false;
     },
     GeraQr() {
       if (this.input != null && this.input > 0) {
-        this.$confirm('确认收款金额为' + 'R$' + this.input + '?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
+        this.$confirm("确认收款金额为" + "R$" + this.input + "?", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
         }).then(() => {
-          this.show = true
+          this.show = true;
           // 生成时间信息
-          if (this.value === '' || this.value === 0) {
-            this.value = 15
+          if (this.value === "" || this.value === 0) {
+            this.value = 15;
           }
-          var curTime = new Date()
-          var posCurTime = new Date(curTime.setMinutes(curTime.getMinutes() + this.value))
-          this.expTime = posCurTime.getDate() + '/' + posCurTime.getMonth() + 1 + '   ' + this.getZero(posCurTime.getHours()) + ':' + this.getZero(posCurTime.getMinutes())
+          var curTime = new Date();
+          var posCurTime = new Date(
+            curTime.setMinutes(curTime.getMinutes() + this.value)
+          );
+          this.expTime =
+            posCurTime.getDate() +
+            "/" +
+            posCurTime.getMonth() +
+            1 +
+            "   " +
+            this.getZero(posCurTime.getHours()) +
+            ":" +
+            this.getZero(posCurTime.getMinutes());
 
           // 写入信息到数据库
 
           // 调用Pix Api
           // 将pix信息渲染到二维码上
-          this.appSrc = '确认收款金额为' + 'R$' + this.input
-        })
+          this.appSrc = "确认收款金额为" + "R$" + this.input;
+        });
       } else {
         this.$message({
-          type: 'error',
-          message: '请输入正确金额'
-        })
+          type: "error",
+          message: "请输入正确金额",
+        });
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>

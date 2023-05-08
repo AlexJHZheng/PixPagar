@@ -84,50 +84,38 @@ export const constantRoutes = [{
     meta: { title: 'dashboard', icon: 'dashboard', affix: true }
   }]
 },
-{
-  path: '/pix',
-  component: Layout,
-  children: [{
-    path: 'index',
-    component: () =>
-      import ('@/views/pix/index'),
-    name: 'Pix',
-    meta: { title: 'pix', icon: 'documentation' }
-  }]
-},
 // {
-//   path: '/guide',
+//   path: '/profile',
 //   component: Layout,
-//   redirect: '/guide/index',
-//   children: [
-//     {
-//       path: 'index',
-//       component: () => import('@/views/guide/index'),
-//       name: 'Guide',
-//       meta: { title: 'guide', icon: 'guide', noCache: true }
-//     }
-//   ]
-// },
-{
-  path: '/profile',
-  component: Layout,
-  redirect: '/profile/index',
-  hidden: true,
-  children: [{
-    path: 'index',
-    component: () =>
-      import ('@/views/profile/index'),
-    name: 'Profile',
-    meta: { title: 'profile', icon: 'user', noCache: true }
-  }]
-}
+//   redirect: '/profile/index',
+//   hidden: true,
+//   children: [{
+//     path: 'index',
+//     component: () =>
+//       import ('@/views/profile/index'),
+//     name: 'Profile',
+//     meta: { title: 'profile', icon: 'user', noCache: true }
+//   }]
+// }
 ]
 
 /**
  * asyncRoutes
  * the routes that need to be dynamically loaded based on user roles
  */
-export const asyncRoutes = [{
+export const asyncRoutes = [
+  {
+    path: '/pix',
+    component: Layout,
+    children: [{
+      path: 'index',
+      component: () =>
+        import ('@/views/pix/index'),
+      name: 'Pix',
+      meta: { title: 'pix', icon: 'documentation',roles: ['editor'] }
+    }]
+  },
+  {
   path: '/permission',
   component: Layout,
   redirect: '/permission/page',
