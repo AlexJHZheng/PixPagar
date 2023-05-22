@@ -1,5 +1,5 @@
-import { login, logout, getInfo, refresh ,checkToken} from '@/api/user'
-import { getToken, setToken, removeToken,getCookie, setCookie,removeCookie} from '@/utils/auth'
+import { login, logout, getInfo, refresh, checkToken } from '@/api/user'
+import { getToken, setToken, removeToken, getCookie, setCookie, removeCookie } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
 
 const state = {
@@ -8,7 +8,7 @@ const state = {
   avatar: '',
   introduction: '',
   roles: [],
-  refreshToken:''
+  refreshToken: ''
 }
 
 const mutations = {
@@ -43,8 +43,8 @@ const actions = {
         commit('SET_ROLES', response.roles)
         commit('SET_NAME', response.name)
         // setToken(response.token)
-        setCookie('Admin-Token',response.token)
-        setCookie('refreshToken',response.refreshToken)
+        setCookie('Admin-Token', response.token)
+        setCookie('refreshToken', response.refreshToken)
         resolve()
       }).catch(error => {
         reject(error)
@@ -54,7 +54,7 @@ const actions = {
 
   // get user info
   getInfo({ commit, state }) {
-    console.log(state.token,'这里是state.token')
+    console.log(state.token, '这里是state.token')
     return new Promise((resolve, reject) => {
       getInfo(state.token).then(response => {
         if (!response) {
@@ -80,21 +80,20 @@ const actions = {
 
   // user logout
   logout({ commit, state, dispatch }) {
+    console.log('logout')
+    removeCookie('Admin-Token')
+    removeCookie('refreshToken')
+    console.log('logout1')
+    // 在cookie中检查refreshtoken是否存在，存在输出true，不存在输出false
     return new Promise((resolve, reject) => {
-      logout(state.token).then(() => {
-        commit('SET_TOKEN', '')
-        commit('SET_ROLES', [])
-        removeToken()
-        resetRouter()
-
-        // reset visited views and cached views
-        // to fixed https://github.com/PanJiaChen/vue-element-admin/issues/2485
-        dispatch('tagsView/delAllViews', null, { root: true })
-
-        resolve()
-      }).catch(error => {
-        reject(error)
-      })
+      // 如果cookie中的Admin-Token和refreshToken为undefined,则返回resolve
+      const token = getCookie('Admin-Token')
+      const refreshToken = getCookie('refreshToken')
+      if (token === undefined && refreshToken === undefined) {
+        resolve(true)
+      }
+    }).catch(error => {
+      reject(error)
     })
   },
 
@@ -115,17 +114,17 @@ const actions = {
       if (refreshToken) {
         refresh({ refreshToken: refreshToken }).then(response => {
           const { token } = response
-          if(token){
+          if (token) {
             commit('SET_TOKEN', response.token)
-            setCookie('Admin-Token',response.token)
+            setCookie('Admin-Token', response.token)
             resolve(true)
-          }else{
+          } else {
             resolve(false)
-          
           }
         })
-      }})
-    },
+      }
+    })
+  },
 
   // dynamically modify permissions
   async changeRoles({ commit, dispatch }, role) {
@@ -152,18 +151,18 @@ const actions = {
       const token = getCookie('Admin-Token')
       const refreshToken = getCookie('refreshToken')
       // 通过接口传递token和refreshToken
-      checkToken({token, refreshToken }).then(response => {
+      checkToken({ token, refreshToken }).then(response => {
         console.log('核对点1')
-        console.log(response,'这里是responseCheckToken')
+        console.log(response, '这里是responseCheckToken')
         const { tokenCode } = response
-        if(tokenCode === 0){
+        if (tokenCode === 0) {
           resolve(false)
-        }else if (tokenCode === 1) {
+        } else if (tokenCode === 1) {
           resolve(true)
         } else if (tokenCode === 2) {
           // 把接收到的新token存入cookie和vuex
           commit('SET_TOKEN', token)
-          setCookie('Admin-Token',token)
+          setCookie('Admin-Token', token)
           resolve(true)
         } else {
           resolve(false)
