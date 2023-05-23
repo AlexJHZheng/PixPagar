@@ -14,13 +14,20 @@
               /> </el-select
           ></el-col>
           <el-col :span="6" style="padding: 10px"
-            ><el-input v-model="pedido" type="text" placeholder="订单(选填)"
+            ><el-input
+              v-model="pedido"
+              type="text"
+              placeholder="订单号"
+              :disabled="true"
           /></el-col>
           <el-col :span="6" style="padding: 10px"
             ><el-input
               v-model="clientName"
               type="text"
               placeholder="客人名称(选填)"
+          /></el-col>
+          <el-col :span="6" style="padding: 10px"
+            ><el-input v-model="summary" type="text" placeholder="备注(选填)"
           /></el-col>
         </el-row>
         <el-row style="padding: 0px">
@@ -94,8 +101,9 @@
             </el-col>
           </el-row>
         </div>
-
-        <el-button type="success" @click="clear">清除</el-button>
+        <!-- <el-button type="success" @click="clear">清除</el-button> -->
+        <el-button type="danger" @click="clear">删除</el-button>
+        <el-button type="primary" @click="clear">生成新收款单</el-button>
       </el-main>
       <!-- 二维码区域结束 -->
       <el-footer />
@@ -105,6 +113,7 @@
 
 <script>
 import VueQr from "vue-qr";
+import { addPay } from "@/api/pay";
 
 export default {
   name: "Documentation",
@@ -112,10 +121,11 @@ export default {
   data() {
     return {
       expTime: "",
-      value: "",
+      value: 30,
       show: false,
       pedido: "",
       clientName: "",
+      summary: "",
       options: [
         {
           value: 10,
@@ -143,7 +153,30 @@ export default {
   methods: {
     // test方法，打印dispatch中的数据
     test() {
-      console.log(this.$store.state);
+      // console.log(this.$store.state);
+      var res = this.generateOrderNumber();
+      console.log(res, "订单号");
+    },
+    generateOrderNumber() {
+      const currentDate = new Date();
+      const year = currentDate.getFullYear();
+      const month = String(currentDate.getMonth() + 1).padStart(2, "0");
+      const day = String(currentDate.getDate()).padStart(2, "0");
+      const hours = String(currentDate.getHours()).padStart(2, "0");
+      const minutes = String(currentDate.getMinutes()).padStart(2, "0");
+      const seconds = String(currentDate.getSeconds()).padStart(2, "0");
+      const milliseconds = String(currentDate.getMilliseconds()).padStart(
+        3,
+        "0"
+      );
+
+      const randomCode1 = Math.floor(Math.random() * 100);
+      const randomCode2 = Math.floor(Math.random() * 1000);
+      const randomCode3 = Math.floor(Math.random() * 1000);
+
+      const orderNumber = `${year}${month}${day}${hours}${minutes}${seconds}${milliseconds}${randomCode1}${randomCode2}${randomCode3}`;
+
+      return orderNumber;
     },
     getZero(num) {
       // 补0
@@ -185,10 +218,20 @@ export default {
             this.getZero(posCurTime.getHours()) +
             ":" +
             this.getZero(posCurTime.getMinutes());
-
-          // 写入信息到数据库
+          // 生成订单号
+          this.pedido = this.generateOrderNumber();
+          // 调用payApi中的方法，生成pix信息
+          addPay({
+            payTotal: this.input,
+            payNum: this.pedido,
+            payObs: this.summary,
+            payClient: this.clientName,
+          }).then((res) => {
+            console.log(res);
+          });
 
           // 调用Pix Api
+
           // 将pix信息渲染到二维码上
           this.appSrc = "确认收款金额为" + "R$" + this.input;
         });
