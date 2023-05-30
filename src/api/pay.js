@@ -14,8 +14,22 @@ export function addPay(data) {
     method: 'put',
     headers, // 添加请求头
     data
-  })
+  });
 }
 
+// 获取支付流水列表
+export function getPayList(data) {
+  const token = getToken()
+  const headers = {
+    Authorization: `Bearer ${token}`
+  };
+  // 返回 post getList方法
+  return request({
+    url: '/api/getPayFlowList',
+    method: 'get',
+    headers, // 添加请求头
+    params: data
+  });
+}
 
 

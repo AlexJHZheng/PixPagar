@@ -33,32 +33,36 @@
             width="55"
           >
           </el-table-column> -->
-          <el-table-column prop="no" label="编号" />
-          <el-table-column prop="date" label="日期" />
-          <el-table-column prop="loja" label="店铺" />
-          <el-table-column prop="pedido" label="单号(可选)" />
-          <el-table-column prop="cliente" label="客人" />
-          <el-table-column prop="valor" label="金额" />
+          <el-table-column prop="payNum" label="编号" width="215px" />
           <el-table-column
-            prop="payStatu"
+            prop="payDate"
+            label="日期"
+            :formatter="formatDate"
+          />
+          <el-table-column prop="summary" label="店铺" />
+          <!-- <el-table-column prop="pedido" label="单号(可选)" /> -->
+          <el-table-column prop="payClient" label="客人" />
+          <el-table-column prop="payTotal" label="金额" />
+          <el-table-column
+            prop="payStatus"
             label="状态"
             :filters="ftstatus"
             :filter-method="filterHandler"
           >
             <template slot-scope="scope">
-              <el-tag v-if="scope.row.payStatu === 0" type="success"
+              <el-tag v-if="scope.row.payStatus === 0" type="success"
                 >Recebido</el-tag
               >
-              <el-tag v-if="scope.row.payStatu === 1" type="warning"
+              <el-tag v-if="scope.row.payStatus === 1" type="warning"
                 >Pendente</el-tag
               >
-              <el-tag v-if="scope.row.payStatu === 2" type="info"
+              <el-tag v-if="scope.row.payStatus === 2" type="info"
                 >Parcial</el-tag
               >
-              <el-tag v-if="scope.row.payStatu === 3" type="danger"
+              <el-tag v-if="scope.row.payStatus === 3" type="danger"
                 >Cancelado</el-tag
               >
-              <el-tag v-if="scope.row.payStatu === 4" type="info"
+              <el-tag v-if="scope.row.payStatus === 4" type="info"
                 >Estornado</el-tag
               >
             </template>
@@ -87,6 +91,8 @@
 <script>
 // import permission from "@/directive/permission/index.js"; // 权限判断指令
 import checkPermission from "@/utils/permission"; // 权限判断函数
+import { getPayList } from "@/api/pay";
+import { get } from "js-cookie";
 export default {
   data() {
     return {
@@ -179,8 +185,62 @@ export default {
       multipleSelection: [],
     };
   },
-  mounted() {},
+  mounted() {
+    // 这里是生命周期函数，会在页面加载时执行
+    // 调用api中的getList方法获取到数据，并赋值给tableData
+    // this.getList();
+  },
   methods: {
+    // 优化表格显示时间
+    formatDate(row, column) {
+      const date = new Date(row.payDate);
+      const year = date.getFullYear();
+      const month = (date.getMonth() + 1).toString().padStart(2, "0");
+      const day = date.getDate().toString().padStart(2, "0");
+      const hours = date.getHours().toString().padStart(2, "0");
+      const minutes = date.getMinutes().toString().padStart(2, "0");
+
+      return `${year}-${month}-${day} ${hours}:${minutes}`;
+    },
+    // 时间单个转换方法方法
+    convertToDatabaseFormat(date) {
+      const year = date.getFullYear();
+      const month = (date.getMonth() + 1).toString().padStart(2, "0");
+      const day = date.getDate().toString().padStart(2, "0");
+      const hours = date.getHours().toString().padStart(2, "0");
+      const minutes = date.getMinutes().toString().padStart(2, "0");
+      const seconds = date.getSeconds().toString().padStart(2, "0");
+
+      return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    },
+    // 点击查询按钮时触发
+    onSubmit() {
+      //首先判断datatime是否为空
+      //如果不为空则通过convertToDatabaseFormat方法提取住startTime和endTime
+      //如果为空则不提取
+      let startTime = "";
+      let endTime = "";
+      if (this.datetime) {
+        startTime = this.convertToDatabaseFormat(this.datetime[0]);
+        // 获取endTime，并给时间加上23小时59分59秒
+        endTime = this.convertToDatabaseFormat(this.datetime[1]);
+        endTime = endTime.split(" ")[0] + " 23:59:59";
+        // endTime = this.convertToDatabaseFormat(this.datetime[1]);
+        console.log(startTime, "开始时间");
+        console.log(endTime, "结束时间");
+      }
+      const query = {}; // 创建一个空的查询对象
+
+      if (startTime && endTime) {
+        query.startTime = startTime;
+        query.endTime = endTime;
+      }
+
+      getPayList(query).then((res) => {
+        console.log(res, "查询结果");
+        this.tableData = res.data;
+      });
+    },
     filterHandler(value, row, column) {
       const property = column["property"];
       return row[property] === value;
