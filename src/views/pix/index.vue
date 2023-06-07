@@ -2,7 +2,7 @@
   <div style="margin: 0px" class="app-container documentation-container">
     <el-container>
       <el-main style="padding: 0px">PIX 收银台</el-main>
-      <el-main style="padding: 0px">
+      <el-main style="padding: 0px" v-loading="loading">
         <el-row>
           <el-col :span="6" style="padding: 10px"
             ><el-select v-model="value" placeholder="有效时间">
@@ -120,6 +120,7 @@ export default {
   components: { VueQr },
   data() {
     return {
+      loading: false,
       expTime: "",
       value: 30,
       show: false,
@@ -153,9 +154,11 @@ export default {
   methods: {
     // test方法，打印dispatch中的数据
     test() {
-      // console.log(this.$store.state);
-      var res = this.generateOrderNumber();
-      console.log(res, "订单号");
+      if (this.loading) {
+        this.loading = false;
+      } else {
+        this.loading = true;
+      }
     },
     generateOrderNumber() {
       const currentDate = new Date();
@@ -200,7 +203,8 @@ export default {
           cancelButtonText: "取消",
           type: "warning",
         }).then(() => {
-          this.show = true;
+          // 加载动画
+          this.loading = true;
           // 生成时间信息
           if (this.value === "" || this.value === 0) {
             this.value = 15;
@@ -226,14 +230,15 @@ export default {
             payNum: this.pedido,
             payObs: this.summary,
             payClient: this.clientName,
+            expiration: this.value,
           }).then((res) => {
-            console.log(res);
+            // console.log(res);
+            this.show = true;
+            this.loading = false;
+            this.appSrc = res.data.pix_copy;
           });
-
           // 调用Pix Api
-
           // 将pix信息渲染到二维码上
-          this.appSrc = "确认收款金额为" + "R$" + this.input;
         });
       } else {
         this.$message({

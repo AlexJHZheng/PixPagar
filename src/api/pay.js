@@ -32,4 +32,19 @@ export function getPayList(data) {
   });
 }
 
+//查询支付状态
+export function getPayStatus(data) {
+  const token = getToken()
+  const headers = {
+    Authorization: `Bearer ${token}`
+  };
+  // 返回 post getList方法
+  return request({
+    url: '/api/getPayStatus',
+    method: 'post',
+    headers, // 添加请求头
+    data
+  });
+}
+
 

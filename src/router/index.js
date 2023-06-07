@@ -114,6 +114,17 @@ export const asyncRoutes = [
     }]
   },
   {
+    path: '/config',
+    component: Layout,
+    children: [{
+      path: 'index',
+      component: () =>
+        import ('@/views/config/index'),
+      name: 'Config',
+      meta: { title: 'config', icon: 'documentation', roles: ['admin'] }
+    }]
+  },
+  {
     path: '/permission',
     component: Layout,
     redirect: '/permission/page',
