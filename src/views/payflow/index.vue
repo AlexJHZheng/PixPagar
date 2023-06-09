@@ -41,7 +41,8 @@
           />
           <el-table-column prop="summary" label="店铺" />
           <!-- <el-table-column prop="pedido" label="单号(可选)" /> -->
-          <el-table-column prop="payClient" label="客人" />
+          <el-table-column prop="payClient" label="客人/订单号" />
+          <el-table-column prop="payObs" label="备注/CNPJ" />
           <el-table-column prop="payTotal" label="金额" />
           <el-table-column
             prop="payStatus"
@@ -95,12 +96,15 @@
       </el-main>
     </el-container>
     <el-dialog
-      title="Pay Status"
+      title="Escanhar QR Code Para pagar"
       :visible.sync="dialogVisible"
-      width="30%"
+      width="440px"
       :before-close="handleClose"
     >
-      <span>这是一段信息</span>
+      <!-- 图片大小控制在400px 400px -->
+      <img :src="imgQr" class="image" style="width: 400px; height: 400px" />
+      <h3>Valor a pagar R$ {{ valorQr }}</h3>
+      <!-- <img :src="imgQr" class="image" /> -->
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="dialogVisible = false">OK</el-button>
       </span>
@@ -116,10 +120,12 @@ import { get } from "js-cookie";
 export default {
   data() {
     return {
+      imgQr: "", //二维码图片地址
+      valorQr: 0, //二维码金额
       dialogVisible: false,
       currentPage: 0,
       totalCount: 0,
-      pageSize: 5,
+      pageSize: 20,
       checked: false,
       ftstatus: [
         { value: 0, text: "已收款" },
@@ -144,23 +150,35 @@ export default {
     //关闭弹出窗
     handleClose(done) {
       this.dialogVisible = false;
+      this.imgQr = "";
     },
     handlePay(scope) {
-      console.log(scope);
-      this.dialogVisible = true;
       // 使用scope.pix_path来查询
       getPayStatus({ pix_path: scope.pix_path }).then((res) => {
         console.log(res);
-        if (res.status == 200 && res.data.status == 0) {
-          // 支付成功
-          console.log(res.msg);
-        } else if (res.status == 200 && res.data.status == 1) {
-          // 显示二维码
-          console.log(res.data.pix_wallet);
+        if (res.success) {
+          // 查询成功，显示二维码
+          this.imgQr = res.data.pix_wallet;
+          this.valorQr = res.data.amount;
+          this.dialogVisible = true;
+        } else if (res.code == 200) {
+          // 付款已成功，刷新页面
+          this.$message({
+            message: "付款成功Pagamento Successo",
+            type: "success",
+            duration: 5 * 1000,
+          });
+          this.getInfoList(this.currentPage);
+        } else {
+          // 刷新数据
+          this.$message({
+            message: res.msg,
+            type: "error",
+            duration: 5 * 1000,
+          });
+          this.getInfoList(this.currentPage);
         }
       });
-      // 如果过期则调用webhook接口更新上去
-      // 如果没过期则正常显示二维码
     },
     // 页面切换
     handlePageChange(newPage) {
