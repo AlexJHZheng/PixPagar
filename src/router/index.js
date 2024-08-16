@@ -38,52 +38,51 @@ import Layout from '@/layout'
  * a base page that does not have permission requirements
  * all roles can be accessed
  */
-export const constantRoutes = [{
-  path: '/redirect',
-  component: Layout,
-  hidden: true,
-  children: [{
-    path: '/redirect/:path(.*)',
-    component: () =>
-      import ('@/views/redirect/index')
-  }]
-},
-{
-  path: '/login',
-  component: () =>
-    import ('@/views/login/index'),
-  hidden: true
-},
-{
-  path: '/auth-redirect',
-  component: () =>
-    import ('@/views/login/auth-redirect'),
-  hidden: true
-},
-{
-  path: '/404',
-  component: () =>
-    import ('@/views/error-page/404'),
-  hidden: true
-},
-{
-  path: '/401',
-  component: () =>
-    import ('@/views/error-page/401'),
-  hidden: true
-},
-{
-  path: '/',
-  component: Layout,
-  redirect: '/dashboard',
-  children: [{
-    path: 'dashboard',
-    component: () =>
-      import ('@/views/dashboard/index'),
-    name: 'Dashboard',
-    meta: { title: 'dashboard', icon: 'dashboard', affix: true }
-  }]
-}
+export const constantRoutes = [
+  {
+    path: '/redirect',
+    component: Layout,
+    hidden: true,
+    children: [
+      {
+        path: '/redirect/:path(.*)',
+        component: () => import('@/views/redirect/index')
+      }
+    ]
+  },
+  {
+    path: '/login',
+    component: () => import('@/views/login/index'),
+    hidden: true
+  },
+  {
+    path: '/auth-redirect',
+    component: () => import('@/views/login/auth-redirect'),
+    hidden: true
+  },
+  {
+    path: '/404',
+    component: () => import('@/views/error-page/404'),
+    hidden: true
+  },
+  {
+    path: '/401',
+    component: () => import('@/views/error-page/401'),
+    hidden: true
+  },
+  {
+    path: '/',
+    component: Layout,
+    redirect: '/dashboard',
+    children: [
+      {
+        path: 'dashboard',
+        component: () => import('@/views/dashboard/index'),
+        name: 'Dashboard',
+        meta: { title: 'dashboard', icon: 'dashboard', affix: true }
+      }
+    ]
+  }
 ]
 
 /**
@@ -94,110 +93,138 @@ export const asyncRoutes = [
   {
     path: '/pix',
     component: Layout,
-    children: [{
-      path: 'index',
-      component: () =>
-        import ('@/views/pix/index'),
-      name: 'Pix',
-      meta: { title: 'pix', icon: 'documentation', roles: ['editor'] }
-    }]
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/pix/index'),
+        name: 'Pix',
+        meta: { title: 'pix', icon: 'documentation', roles: ['editor'] }
+      }
+    ]
   },
   {
     path: '/payflow',
     component: Layout,
-    children: [{
-      path: 'index',
-      component: () =>
-        import ('@/views/payflow/index'),
-      name: 'Payflow',
-      meta: { title: 'payflow', icon: 'documentation', roles: ['editor'] }
-    }]
-  },
-  {
-    path: '/config',
-    component: Layout,
-    children: [{
-      path: 'index',
-      component: () =>
-        import ('@/views/config/index'),
-      name: 'Config',
-      meta: { title: 'config', icon: 'documentation', roles: ['admin'] }
-    }]
-  },
-  {
-    path: '/permission',
-    component: Layout,
-    redirect: '/permission/page',
-    alwaysShow: true, // will always show the root menu
-    name: 'Permission',
-    meta: {
-      title: 'permission',
-      icon: 'lock',
-      roles: ['admin', 'editor'] // you can set roles in root nav
-    },
-    children: [{
-      path: 'page',
-      component: () =>
-        import ('@/views/permission/page'),
-      name: 'PagePermission',
-      meta: {
-        title: 'pagePermission',
-        roles: ['admin'] // or you can only set roles in sub nav
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/payflow/index'),
+        name: 'Payflow',
+        meta: { title: 'payflow', icon: 'documentation', roles: ['editor'] }
       }
-    },
-    {
-      path: 'directive',
-      component: () =>
-        import ('@/views/permission/directive'),
-      name: 'DirectivePermission',
-      meta: {
-        title: 'directivePermission'
-      // if do not set roles, means: this page does not require permission
-      }
-    },
-    {
-      path: 'role',
-      component: () =>
-        import ('@/views/permission/role'),
-      name: 'RolePermission',
-      meta: {
-        title: 'rolePermission',
-        roles: ['admin']
-      }
-    }
     ]
   },
   {
-    path: '/error-log',
+    path: '/paycount',
     component: Layout,
-    children: [{
-      path: 'log',
-      component: () =>
-        import ('@/views/error-log/index'),
-      name: 'ErrorLog',
-      meta: { title: 'errorLog', icon: 'bug' }
-    }]
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/paycount/index'),
+        name: 'Paycount',
+        meta: { title: 'paycount', icon: 'documentation', roles: ['editor'] }
+      }
+    ]
   },
   {
-    path: '/i18n',
+    path: '/shopcount',
     component: Layout,
-    children: [{
-      path: 'index',
-      component: () =>
-        import ('@/views/i18n-demo/index'),
-      name: 'I18n',
-      meta: { title: 'i18n', icon: 'international' }
-    }]
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/shopcount/index'),
+        name: 'Shopcount',
+        meta: { title: 'shopcount', icon: 'documentation', roles: ['admin'] }
+      }
+    ]
   },
+  // {
+  //   path: "/config",
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: "index",
+  //       component: () => import("@/views/config/index"),
+  //       name: "Config",
+  //       meta: { title: "config", icon: "documentation", roles: ["admin"] },
+  //     },
+  //   ],
+  // },
+  // {
+  //   path: '/permission',
+  //   component: Layout,
+  //   redirect: '/permission/page',
+  //   alwaysShow: true, // will always show the root menu
+  //   name: 'Permission',
+  //   meta: {
+  //     title: 'permission',
+  //     icon: 'lock',
+  //     roles: ['admin', 'editor'] // you can set roles in root nav
+  //   },
+  //   children: [{
+  //     path: 'page',
+  //     component: () =>
+  //       import ('@/views/permission/page'),
+  //     name: 'PagePermission',
+  //     meta: {
+  //       title: 'pagePermission',
+  //       roles: ['admin'] // or you can only set roles in sub nav
+  //     }
+  //   },
+  // {
+  //   path: 'directive',
+  //   component: () =>
+  //     import ('@/views/permission/directive'),
+  //   name: 'DirectivePermission',
+  //   meta: {
+  //     title: 'directivePermission'
+  //   // if do not set roles, means: this page does not require permission
+  //   }
+  // },
+  // {
+  //   path: 'role',
+  //   component: () =>
+  //     import ('@/views/permission/role'),
+  //   name: 'RolePermission',
+  //   meta: {
+  //     title: 'rolePermission',
+  //     roles: ['admin']
+  //   }
+  // }
+  //   ]
+  // },
+  // {
+  //   path: '/error-log',
+  //   component: Layout,
+  //   children: [{
+  //     path: 'log',
+  //     component: () =>
+  //       import ('@/views/error-log/index'),
+  //     name: 'ErrorLog',
+  //     meta: { title: 'errorLog', icon: 'bug' }
+  //   }]
+  // },
+  // {
+  //   path: '/i18n',
+  //   component: Layout,
+  //   children: [{
+  //     path: 'index',
+  //     component: () =>
+  //       import ('@/views/i18n-demo/index'),
+  //     name: 'I18n',
+  //     meta: { title: 'i18n', icon: 'international' }
+  //   }]
+  // },
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]
 
-const createRouter = () => new Router({
-  // mode: 'history', // require service support
-  scrollBehavior: () => ({ y: 0 }),
-  routes: constantRoutes
-})
+const createRouter = () =>
+  new Router({
+    // mode: 'history', // require service support
+    scrollBehavior: () => ({ y: 0 }),
+    routes: constantRoutes
+  })
 
 const router = createRouter()
 
