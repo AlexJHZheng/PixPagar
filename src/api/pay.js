@@ -7,14 +7,14 @@ export function addPay(data) {
   const token = getToken()
   const headers = {
     Authorization: `Bearer ${token}`
-  };
+  }
   // 将token放入请求头中
   return request({
     url: '/api/addPayFlow',
     method: 'put',
     headers, // 添加请求头
     data
-  });
+  })
 }
 
 // 获取支付流水列表
@@ -22,29 +22,57 @@ export function getPayList(data) {
   const token = getToken()
   const headers = {
     Authorization: `Bearer ${token}`
-  };
+  }
   // 返回 post getList方法
   return request({
     url: '/api/getPayFlowList',
     method: 'get',
     headers, // 添加请求头
     params: data
-  });
+  })
 }
 
-//查询支付状态
+// 查询支付状态
 export function getPayStatus(data) {
   const token = getToken()
   const headers = {
     Authorization: `Bearer ${token}`
-  };
+  }
   // 返回 post getList方法
   return request({
     url: '/api/getPayStatus',
     method: 'post',
     headers, // 添加请求头
     data
-  });
+  })
 }
 
+// 查询店家已支付的总金额和列表
+export function getPayTotalList(data) {
+  const token = getToken()
+  const headers = {
+    Authorization: `Bearer ${token}`
+  }
+  // 返回 post getList方法
+  return request({
+    url: '/api/getPayTotalList',
+    method: 'get',
+    headers, // 添加请求头
+    params: data
+  })
+}
 
+// 查询全部店家已支付的总金额
+export function getPayShopTotal(data) {
+  const token = getToken()
+  const headers = {
+    Authorization: `Bearer ${token}`
+  }
+  // 返回 post getList方法
+  return request({
+    url: '/api/getPayShopTotal',
+    method: 'get',
+    headers, // 添加请求头
+    params: data
+  })
+}

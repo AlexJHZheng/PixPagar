@@ -1,5 +1,5 @@
 module.exports = {
-  title: 'Vue Element Admin',
+  title: 'Sistema Integrado Recebimento Pix',
 
   /**
    * @type {boolean} true | false
