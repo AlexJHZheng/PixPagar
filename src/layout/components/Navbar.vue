@@ -54,14 +54,14 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import Breadcrumb from "@/components/Breadcrumb";
-import Hamburger from "@/components/Hamburger";
-import ErrorLog from "@/components/ErrorLog";
-import Screenfull from "@/components/Screenfull";
-import SizeSelect from "@/components/SizeSelect";
-import LangSelect from "@/components/LangSelect";
-import Search from "@/components/HeaderSearch";
+import { mapGetters } from 'vuex'
+import Breadcrumb from '@/components/Breadcrumb'
+import Hamburger from '@/components/Hamburger'
+import ErrorLog from '@/components/ErrorLog'
+import Screenfull from '@/components/Screenfull'
+import SizeSelect from '@/components/SizeSelect'
+import LangSelect from '@/components/LangSelect'
+import Search from '@/components/HeaderSearch'
 
 export default {
   components: {
@@ -71,14 +71,14 @@ export default {
     Screenfull,
     SizeSelect,
     LangSelect,
-    Search,
+    Search
   },
   computed: {
-    ...mapGetters(["sidebar", "avatar", "device", "name"]),
+    ...mapGetters(['sidebar', 'avatar', 'device', 'name'])
   },
   methods: {
     toggleSideBar() {
-      this.$store.dispatch("app/toggleSideBar");
+      this.$store.dispatch('app/toggleSideBar')
     },
     // async logout() {
     //   await this.$store.dispatch('user/logout')
@@ -86,15 +86,15 @@ export default {
     // }
     // logout方法，退出登陆并且清除掉cookie中的Admin-Token和refreshToken
     async logout() {
-      await this.$store.dispatch("user/logout").then((result) => {
+      await this.$store.dispatch('user/logout').then((result) => {
         if (result) {
-          this.$router.push(`/login?redirect=${this.$route.fullPath}`);
+          this.$router.push(`/login?redirect=${this.$route.fullPath}`)
         }
-      });
+      })
       // this.$router.push(`/login?redirect=${this.$route.fullPath}`);
-    },
-  },
-};
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>
