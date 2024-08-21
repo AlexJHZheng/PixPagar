@@ -10,20 +10,21 @@
     <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
 
     <div class="right-menu">
-      <template v-if="device !== 'mobile'">
-        <search id="header-search" class="right-menu-item" />
+      <!-- <template v-if="device !== 'mobile'"> -->
+      <template>
+        <!-- <search id="header-search" class="right-menu-item" /> -->
 
-        <error-log class="errLog-container right-menu-item hover-effect" />
+        <!-- <error-log class="errLog-container right-menu-item hover-effect" /> -->
 
         <screenfull id="screenfull" class="right-menu-item hover-effect" />
 
-        <el-tooltip
+        <!-- <el-tooltip
           :content="$t('navbar.size')"
           effect="dark"
           placement="bottom"
-        >
-          <size-select id="size-select" class="right-menu-item hover-effect" />
-        </el-tooltip>
+        > -->
+        <!-- <size-select id="size-select" class="right-menu-item hover-effect" />
+        </el-tooltip> -->
 
         <lang-select class="right-menu-item hover-effect" />
       </template>
@@ -53,14 +54,14 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import Breadcrumb from '@/components/Breadcrumb'
-import Hamburger from '@/components/Hamburger'
-import ErrorLog from '@/components/ErrorLog'
-import Screenfull from '@/components/Screenfull'
-import SizeSelect from '@/components/SizeSelect'
-import LangSelect from '@/components/LangSelect'
-import Search from '@/components/HeaderSearch'
+import { mapGetters } from "vuex";
+import Breadcrumb from "@/components/Breadcrumb";
+import Hamburger from "@/components/Hamburger";
+import ErrorLog from "@/components/ErrorLog";
+import Screenfull from "@/components/Screenfull";
+import SizeSelect from "@/components/SizeSelect";
+import LangSelect from "@/components/LangSelect";
+import Search from "@/components/HeaderSearch";
 
 export default {
   components: {
@@ -70,14 +71,14 @@ export default {
     Screenfull,
     SizeSelect,
     LangSelect,
-    Search
+    Search,
   },
   computed: {
-    ...mapGetters(['sidebar', 'avatar', 'device', 'name'])
+    ...mapGetters(["sidebar", "avatar", "device", "name"]),
   },
   methods: {
     toggleSideBar() {
-      this.$store.dispatch('app/toggleSideBar')
+      this.$store.dispatch("app/toggleSideBar");
     },
     // async logout() {
     //   await this.$store.dispatch('user/logout')
@@ -85,15 +86,15 @@ export default {
     // }
     // logout方法，退出登陆并且清除掉cookie中的Admin-Token和refreshToken
     async logout() {
-      await this.$store.dispatch('user/logout').then((result) => {
+      await this.$store.dispatch("user/logout").then((result) => {
         if (result) {
-          this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+          this.$router.push(`/login?redirect=${this.$route.fullPath}`);
         }
-      })
+      });
       // this.$router.push(`/login?redirect=${this.$route.fullPath}`);
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>

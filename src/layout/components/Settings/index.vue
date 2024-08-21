@@ -40,74 +40,74 @@
 </template>
 
 <script>
-import ThemePicker from "@/components/ThemePicker";
+import ThemePicker from '@/components/ThemePicker'
 
 export default {
   components: { ThemePicker },
   data() {
-    return {};
+    return {}
   },
   computed: {
     isShowJob() {
-      return this.$store.getters.language === "zh";
+      return this.$store.getters.language === 'zh'
     },
     fixedHeader: {
       get() {
-        return this.$store.state.settings.fixedHeader;
+        return this.$store.state.settings.fixedHeader
       },
       set(val) {
-        this.$store.dispatch("settings/changeSetting", {
-          key: "fixedHeader",
-          value: val,
-        });
-      },
+        this.$store.dispatch('settings/changeSetting', {
+          key: 'fixedHeader',
+          value: val
+        })
+      }
     },
     tagsView: {
       get() {
-        return this.$store.state.settings.tagsView;
+        return this.$store.state.settings.tagsView
       },
       set(val) {
-        this.$store.dispatch("settings/changeSetting", {
-          key: "tagsView",
-          value: val,
-        });
-      },
+        this.$store.dispatch('settings/changeSetting', {
+          key: 'tagsView',
+          value: val
+        })
+      }
     },
     sidebarLogo: {
       get() {
-        return this.$store.state.settings.sidebarLogo;
+        return this.$store.state.settings.sidebarLogo
       },
       set(val) {
-        this.$store.dispatch("settings/changeSetting", {
-          key: "sidebarLogo",
-          value: val,
-        });
-      },
+        this.$store.dispatch('settings/changeSetting', {
+          key: 'sidebarLogo',
+          value: val
+        })
+      }
     },
     supportPinyinSearch: {
       get() {
-        return this.$store.state.settings.supportPinyinSearch;
+        return this.$store.state.settings.supportPinyinSearch
       },
       set(val) {
-        this.$store.dispatch("settings/changeSetting", {
-          key: "supportPinyinSearch",
-          value: val,
-        });
-      },
+        this.$store.dispatch('settings/changeSetting', {
+          key: 'supportPinyinSearch',
+          value: val
+        })
+      }
     },
     lang() {
-      return this.$store.getters.language;
-    },
+      return this.$store.getters.language
+    }
   },
   methods: {
     themeChange(val) {
-      this.$store.dispatch("settings/changeSetting", {
-        key: "theme",
-        value: val,
-      });
-    },
-  },
-};
+      this.$store.dispatch('settings/changeSetting', {
+        key: 'theme',
+        value: val
+      })
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>

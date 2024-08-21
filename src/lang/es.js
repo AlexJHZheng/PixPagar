@@ -1,6 +1,6 @@
 export default {
   route: {
-    dashboard: "Panel de controle",
+    dashboard: "Dashboard",
     pix: "Gerar Pix",
     payflow: "Fluxo de Pagamento",
     paycount: "Recebimento loja",

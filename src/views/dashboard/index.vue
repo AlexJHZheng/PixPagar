@@ -6,7 +6,7 @@
       <h2>{{ $t("dashboard.pixrecive") }}</h2>
     </div>
     <div class="responsive-container">
-      <img src="/pix.png" alt="pix" />
+      <img src="/pix.png" alt="pix">
     </div>
     <div style="margin-left: 30px; margin-right: 30px">
       <h4>
@@ -20,22 +20,22 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import adminDashboard from "./admin";
+import { mapGetters } from 'vuex'
+import adminDashboard from './admin'
 
 export default {
-  name: "Dashboard",
+  name: 'Dashboard',
   components: { adminDashboard },
   data() {
     return {
-      currentRole: "adminDashboard",
-    };
+      currentRole: 'adminDashboard'
+    }
   },
   computed: {
-    ...mapGetters(["roles"]),
+    ...mapGetters(['roles'])
   },
-  created() {},
-};
+  created() {}
+}
 </script>
 <style scoped>
 .responsive-container {

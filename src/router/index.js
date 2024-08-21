@@ -146,6 +146,22 @@ export const asyncRoutes = [
       },
     ],
   },
+  {
+    path: "/autopix",
+    component: Layout,
+    children: [
+      {
+        path: "index",
+        component: () => import("@/views/autopix/index"),
+        name: "Autopix",
+        meta: {
+          title: "autopix",
+          icon: "el-icon-bank-card",
+          roles: ["admin", "user"],
+        },
+      },
+    ],
+  },
   // {
   //   path: '/permission',
   //   component: Layout,

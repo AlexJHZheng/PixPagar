@@ -102,7 +102,7 @@
                 <div style="padding: 14px">
                   <span>R${{ input }}</span>
                   <div class="bottom clearfix">
-                    <time class="time">A validade expira：{{ expTime }}</time>
+                    <time class="time">过期时间：{{ expTime }}</time>
                   </div>
                 </div>
               </el-card>
@@ -272,7 +272,7 @@ export default {
     GeraQr() {
       if (this.input != null && this.input > 0) {
         this.$confirm(
-          this.$t("pix.comformvalor") + " R$" + this.input + "?",
+          this.$t("pix.comformvalor") + "R$" + this.input + "?",
           this.$t("pix.notice"),
           {
             confirmButtonText: this.$t("pix.comfirm"),
