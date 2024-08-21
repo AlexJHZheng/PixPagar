@@ -1,23 +1,43 @@
 <template>
   <div style="margin: 0px" class="app-container documentation-container">
     <el-container>
-      <el-header>
-        <el-form ref="form" :inline="true" :model="form" label-width="80px">
-          <el-form-item label="时间范围">
-            <div class="grid-content bg-purple">
-              <el-date-picker
-                v-model="datetime"
-                type="daterange"
-                range-separator="至"
-                start-placeholder="开始日期"
-                end-placeholder="结束日期"
-                align="right"
-              />
-            </div>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="onSubmit">查询</el-button>
-          </el-form-item>
+      <el-header style="height: auto">
+        <el-form
+          ref="form"
+          :inline="true"
+          :model="form"
+          label-width="80px"
+          class="responsive-form"
+        >
+          <el-row :gutter="20">
+            <el-col :span="6" :xs="24">
+              <el-form-item>
+                <el-input
+                  v-model="search"
+                  placeholder="Enter search criteria"
+                />
+              </el-form-item>
+            </el-col>
+            <el-col :span="12" :xs="24">
+              <el-form-item>
+                <el-date-picker
+                  v-model="datetime"
+                  type="daterange"
+                  :range-separator="$t('flow.to')"
+                  :start-placeholder="$t('flow.starttime')"
+                  :end-placeholder="$t('flow.endtime')"
+                  align="right"
+                />
+              </el-form-item>
+            </el-col>
+            <el-col :span="24" :xs="24">
+              <el-form-item>
+                <el-button type="primary" @click="onSubmit">
+                  {{ $t("flow.query") }}
+                </el-button>
+              </el-form-item>
+            </el-col>
+          </el-row>
         </el-form>
       </el-header>
       <el-main>
@@ -33,52 +53,58 @@
             width="55"
           >
           </el-table-column> -->
-          <el-table-column prop="payNum" label="编号" width="215px" />
+          <el-table-column
+            prop="payNum"
+            :label="$t('flow.codico')"
+            width="215px"
+          />
           <el-table-column
             prop="payDate"
-            label="日期"
+            :label="$t('flow.date')"
             :formatter="formatDate"
           />
-          <el-table-column prop="summary" label="店铺" />
-          <!-- <el-table-column prop="pedido" label="单号(可选)" /> -->
-          <el-table-column prop="payClient" label="客人/订单号" />
-          <el-table-column prop="payObs" label="备注/CNPJ" />
-          <el-table-column prop="payTotal" label="金额" />
+          <el-table-column prop="summary" :label="$t('flow.shop')" />
+          <el-table-column prop="payClient" :label="$t('flow.client')" />
+          <el-table-column prop="payObs" :label="$t('flow.summary')" />
+          <el-table-column prop="payTotal" :label="$t('pix.valor')" />
           <el-table-column
             prop="payStatus"
-            label="状态"
+            :label="$t('flow.status')"
             :filters="ftstatus"
             :filter-method="filterHandler"
           >
             <template slot-scope="scope">
-              <el-tag v-if="scope.row.payStatus === 0" type="success"
-                >Recebido</el-tag
-              >
-              <el-tag v-if="scope.row.payStatus === 1" type="warning"
-                >Pendente</el-tag
-              >
-              <el-tag v-if="scope.row.payStatus === 2" type="info"
-                >Parcial</el-tag
-              >
-              <el-tag v-if="scope.row.payStatus === 3" type="danger"
-                >Cancelado</el-tag
-              >
-              <el-tag v-if="scope.row.payStatus === 4" type="info"
-                >Estornado</el-tag
-              >
+              <el-tag v-if="scope.row.payStatus === 0" type="success">{{
+                $t("flow.recived")
+              }}</el-tag>
+              <el-tag v-if="scope.row.payStatus === 1" type="warning">{{
+                $t("flow.notrecive")
+              }}</el-tag>
+              <el-tag v-if="scope.row.payStatus === 2" type="info">{{
+                $t("flow.parcel")
+              }}</el-tag>
+              <el-tag v-if="scope.row.payStatus === 3" type="danger">{{
+                $t("flow.cancel")
+              }}</el-tag>
+              <el-tag v-if="scope.row.payStatus === 4" type="info">{{
+                $t("flow.return")
+              }}</el-tag>
+              <el-tag v-if="scope.row.payStatus === 5" type="info">{{
+                $t("flow.experid")
+              }}</el-tag>
             </template>
           </el-table-column>
-          <el-table-column prop="receveStatu" label="操作">
+          <el-table-column prop="receveStatu" :label="$t('flow.operar')">
             <template slot-scope="scope">
               <el-button
                 v-if="scope.row.payStatus === 1"
                 type="success"
                 @click="handlePay(scope.row)"
-                >二维码</el-button
+                >{{ $t("flow.qrcode") }}</el-button
               >
-              <el-button v-if="scope.row.payStatus === 3" type="danger"
-                >删除</el-button
-              >
+              <el-button v-if="scope.row.payStatus === 3" type="danger">{{
+                $t("flow.delete")
+              }}</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -90,8 +116,7 @@
             :page-size="pageSize"
             :current-page="currentPage"
             @current-change="handlePageChange"
-          >
-          </el-pagination>
+          />
         </div>
       </el-main>
     </el-container>
@@ -102,7 +127,17 @@
       :before-close="handleClose"
     >
       <!-- 图片大小控制在400px 400px -->
-      <img :src="imgQr" class="image" style="width: 400px; height: 400px" />
+      <!-- <img :src="imgQr" class="image" style="width: 400px; height: 400px" /> -->
+      <vue-qr
+        :logo-src="logoSrc"
+        :size="400"
+        :margin="20"
+        :auto-color="true"
+        :dot-scale="1"
+        :text="appSrc"
+        color-dark="black"
+        color-light="white"
+      />
       <h3>Valor a pagar R$ {{ valorQr }}</h3>
       <!-- <img :src="imgQr" class="image" /> -->
       <span slot="footer" class="dialog-footer">
@@ -116,12 +151,16 @@
 // import permission from "@/directive/permission/index.js"; // 权限判断指令
 import checkPermission from "@/utils/permission"; // 权限判断函数
 import { getPayList, getPayStatus } from "@/api/pay";
-import { get } from "js-cookie";
+import VueQr from "vue-qr";
 export default {
+  components: { VueQr },
   data() {
     return {
-      imgQr: "", //二维码图片地址
-      valorQr: 0, //二维码金额
+      search: "", // 搜索框的值
+      searchTotal: 0, // 查询到的总金额
+      logoSrc: "", // 二维码logo地址
+      appSrc: "", // 二维码图片地址
+      valorQr: 0, // 二维码金额
       dialogVisible: false,
       currentPage: 0,
       totalCount: 0,
@@ -133,6 +172,7 @@ export default {
         { value: 2, text: "部分收款" },
         { value: 3, text: "已取消" },
         { value: 4, text: "已退款" },
+        { value: 5, text: "已过期" },
       ],
       form: { type: [] },
       datetime: "",
@@ -147,21 +187,21 @@ export default {
     // this.getList();
   },
   methods: {
-    //关闭弹出窗
+    // 关闭弹出窗
     handleClose(done) {
       this.dialogVisible = false;
-      this.imgQr = "";
+      this.appSrc = "";
     },
     handlePay(scope) {
       // 使用scope.pix_path来查询
       getPayStatus({ pix_path: scope.pix_path }).then((res) => {
-        console.log(res);
+        console.log(res, "res处");
         if (res.success) {
-          // 查询成功，显示二维码
-          this.imgQr = res.data.pix_wallet;
-          this.valorQr = res.data.amount;
+          // 查询成功，显示二维码)
+          this.appSrc = res.data.pixCopiaECola;
+          this.valorQr = scope.payTotal;
           this.dialogVisible = true;
-        } else if (res.code == 200) {
+        } else if (res.Payment == true) {
           // 付款已成功，刷新页面
           this.$message({
             message: "付款成功Pagamento Successo",
@@ -212,13 +252,14 @@ export default {
     },
     // 获取列表数据
     getInfoList(page) {
-      //如果不存在page参数，则默认为1
+      // console.log("sousuoneirong", this.search);
+      // 如果不存在page参数，则默认为1
       if (!page) {
         page = 1;
       }
-      //首先判断datatime是否为空
-      //如果不为空则通过convertToDatabaseFormat方法提取住startTime和endTime
-      //如果为空则不提取
+      // 首先判断datatime是否为空
+      // 如果不为空则通过convertToDatabaseFormat方法提取住startTime和endTime
+      // 如果为空则不提取
       let startTime = "";
       let endTime = "";
       if (this.datetime) {
@@ -235,6 +276,7 @@ export default {
       }
       query.currentPage = page;
       query.pageSize = this.pageSize;
+      query.search = this.search;
 
       getPayList(query).then((res) => {
         this.tableData = res.data.data;

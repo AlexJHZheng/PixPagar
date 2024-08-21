@@ -1,10 +1,10 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+import Vue from "vue";
+import Router from "vue-router";
 
-Vue.use(Router)
+Vue.use(Router);
 
 /* Layout */
-import Layout from '@/layout'
+import Layout from "@/layout";
 
 /* Router Modules */
 // import componentsRouter from './modules/components'
@@ -40,50 +40,50 @@ import Layout from '@/layout'
  */
 export const constantRoutes = [
   {
-    path: '/redirect',
+    path: "/redirect",
     component: Layout,
     hidden: true,
     children: [
       {
-        path: '/redirect/:path(.*)',
-        component: () => import('@/views/redirect/index')
-      }
-    ]
+        path: "/redirect/:path(.*)",
+        component: () => import("@/views/redirect/index"),
+      },
+    ],
   },
   {
-    path: '/login',
-    component: () => import('@/views/login/index'),
-    hidden: true
+    path: "/login",
+    component: () => import("@/views/login/index"),
+    hidden: true,
   },
   {
-    path: '/auth-redirect',
-    component: () => import('@/views/login/auth-redirect'),
-    hidden: true
+    path: "/auth-redirect",
+    component: () => import("@/views/login/auth-redirect"),
+    hidden: true,
   },
   {
-    path: '/404',
-    component: () => import('@/views/error-page/404'),
-    hidden: true
+    path: "/404",
+    component: () => import("@/views/error-page/404"),
+    hidden: true,
   },
   {
-    path: '/401',
-    component: () => import('@/views/error-page/401'),
-    hidden: true
+    path: "/401",
+    component: () => import("@/views/error-page/401"),
+    hidden: true,
   },
   {
-    path: '/',
+    path: "/",
     component: Layout,
-    redirect: '/dashboard',
+    redirect: "/dashboard",
     children: [
       {
-        path: 'dashboard',
-        component: () => import('@/views/dashboard/index'),
-        name: 'Dashboard',
-        meta: { title: 'dashboard', icon: 'dashboard', affix: true }
-      }
-    ]
-  }
-]
+        path: "dashboard",
+        component: () => import("@/views/dashboard/index"),
+        name: "Dashboard",
+        meta: { title: "dashboard", icon: "dashboard", affix: true },
+      },
+    ],
+  },
+];
 
 /**
  * asyncRoutes
@@ -91,65 +91,61 @@ export const constantRoutes = [
  */
 export const asyncRoutes = [
   {
-    path: '/pix',
+    path: "/pix",
     component: Layout,
     children: [
       {
-        path: 'index',
-        component: () => import('@/views/pix/index'),
-        name: 'Pix',
-        meta: { title: 'pix', icon: 'documentation', roles: ['editor'] }
-      }
-    ]
+        path: "index",
+        component: () => import("@/views/pix/index"),
+        name: "Pix",
+        meta: { title: "pix", icon: "el-icon-money", roles: ["editor"] },
+      },
+    ],
   },
   {
-    path: '/payflow',
+    path: "/payflow",
     component: Layout,
     children: [
       {
-        path: 'index',
-        component: () => import('@/views/payflow/index'),
-        name: 'Payflow',
-        meta: { title: 'payflow', icon: 'documentation', roles: ['editor'] }
-      }
-    ]
+        path: "index",
+        component: () => import("@/views/payflow/index"),
+        name: "Payflow",
+        meta: { title: "payflow", icon: "el-icon-document", roles: ["editor"] },
+      },
+    ],
   },
   {
-    path: '/paycount',
+    path: "/paycount",
     component: Layout,
     children: [
       {
-        path: 'index',
-        component: () => import('@/views/paycount/index'),
-        name: 'Paycount',
-        meta: { title: 'paycount', icon: 'documentation', roles: ['editor'] }
-      }
-    ]
+        path: "index",
+        component: () => import("@/views/paycount/index"),
+        name: "Paycount",
+        meta: {
+          title: "paycount",
+          icon: "el-icon-document-checked",
+          roles: ["editor"],
+        },
+      },
+    ],
   },
   {
-    path: '/shopcount',
+    path: "/shopcount",
     component: Layout,
     children: [
       {
-        path: 'index',
-        component: () => import('@/views/shopcount/index'),
-        name: 'Shopcount',
-        meta: { title: 'shopcount', icon: 'documentation', roles: ['admin'] }
-      }
-    ]
+        path: "index",
+        component: () => import("@/views/shopcount/index"),
+        name: "Shopcount",
+        meta: {
+          title: "shopcount",
+          icon: "el-icon-folder-checked",
+          roles: ["admin"],
+        },
+      },
+    ],
   },
-  // {
-  //   path: "/config",
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: "index",
-  //       component: () => import("@/views/config/index"),
-  //       name: "Config",
-  //       meta: { title: "config", icon: "documentation", roles: ["admin"] },
-  //     },
-  //   ],
-  // },
   // {
   //   path: '/permission',
   //   component: Layout,
@@ -216,22 +212,22 @@ export const asyncRoutes = [
   //   }]
   // },
   // 404 page must be placed at the end !!!
-  { path: '*', redirect: '/404', hidden: true }
-]
+  { path: "*", redirect: "/404", hidden: true },
+];
 
 const createRouter = () =>
   new Router({
     // mode: 'history', // require service support
     scrollBehavior: () => ({ y: 0 }),
-    routes: constantRoutes
-  })
+    routes: constantRoutes,
+  });
 
-const router = createRouter()
+const router = createRouter();
 
 // Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
 export function resetRouter() {
-  const newRouter = createRouter()
-  router.matcher = newRouter.matcher // reset router
+  const newRouter = createRouter();
+  router.matcher = newRouter.matcher; // reset router
 }
 
-export default router
+export default router;
