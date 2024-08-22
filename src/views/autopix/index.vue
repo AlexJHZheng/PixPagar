@@ -11,7 +11,7 @@
               :src="defaultImageSrc"
               class="default-image"
               alt="QR Code"
-            />
+            >
             <vue-qr
               v-else
               ref="qrQr"
@@ -52,262 +52,262 @@
 </template>
 
 <script>
-import VueQr from "vue-qr";
-import { addPay, getPayStatus } from "@/api/pay";
+import VueQr from 'vue-qr'
+import { addPay, getPayStatus } from '@/api/pay'
 
 export default {
   components: {
-    VueQr,
+    VueQr
   },
   data() {
     return {
       loading: false,
-      infoText: "",
+      infoText: '',
       qrGenerated: false,
-      defaultImageSrc: "/pix400.png",
-      logoSrc: "/pixqr.png",
-      appSrc: "",
+      defaultImageSrc: '/pix400.png',
+      logoSrc: '/pixqr.png',
+      appSrc: '',
       buttons: [
-        { label: "1" },
-        { label: "2" },
-        { label: "3" },
-        { label: "4" },
-        { label: "5" },
-        { label: "6" },
-        { label: "7" },
-        { label: "8" },
-        { label: "9" },
-        { label: "0" },
-        { label: "." },
-        { label: "Backspace" },
-        { label: "Consulta", type: "success" },
-        { label: "Clear", type: "info" },
-        { label: "Confirm", type: "primary" },
+        { label: '1' },
+        { label: '2' },
+        { label: '3' },
+        { label: '4' },
+        { label: '5' },
+        { label: '6' },
+        { label: '7' },
+        { label: '8' },
+        { label: '9' },
+        { label: '0' },
+        { label: '.' },
+        { label: 'Backspace' },
+        { label: 'Consulta', type: 'success' },
+        { label: 'Clear', type: 'info' },
+        { label: 'Confirm', type: 'primary' }
       ],
       qrSize: 250,
-      inputAmount: "0.00",
-      isFirstInput: true,
-    };
+      inputAmount: '0.00',
+      isFirstInput: true
+    }
   },
   computed: {
     formattedAmount() {
-      return this.inputAmount;
-    },
+      return this.inputAmount
+    }
   },
   mounted() {
     this.$nextTick(() => {
-      this.observeContainerSize();
-    });
+      this.observeContainerSize()
+    })
   },
   methods: {
     getZero(num) {
       // 补0
       // 单数前面加0
       if (parseInt(num) < 10) {
-        num = "0" + num;
+        num = '0' + num
       }
-      return num;
+      return num
     },
     generateOrderNumber() {
-      const currentDate = new Date();
-      console.log(currentDate, "currentDate");
-      const year = currentDate.getFullYear();
-      const month = String(currentDate.getMonth() + 1).padStart(2, "0");
-      const day = String(currentDate.getDate()).padStart(2, "0");
-      const hours = String(currentDate.getHours()).padStart(2, "0");
-      const minutes = String(currentDate.getMinutes()).padStart(2, "0");
-      const seconds = String(currentDate.getSeconds()).padStart(2, "0");
+      const currentDate = new Date()
+      console.log(currentDate, 'currentDate')
+      const year = currentDate.getFullYear()
+      const month = String(currentDate.getMonth() + 1).padStart(2, '0')
+      const day = String(currentDate.getDate()).padStart(2, '0')
+      const hours = String(currentDate.getHours()).padStart(2, '0')
+      const minutes = String(currentDate.getMinutes()).padStart(2, '0')
+      const seconds = String(currentDate.getSeconds()).padStart(2, '0')
       const milliseconds = String(currentDate.getMilliseconds()).padStart(
         3,
-        "0"
-      );
-      const randomCode1 = Math.floor(Math.random() * 100);
-      const randomCode2 = Math.floor(Math.random() * 1000);
-      const randomCode3 = Math.floor(Math.random() * 1000);
-      const orderNumber = `${year}${month}${day}${hours}${minutes}${seconds}${milliseconds}${randomCode1}${randomCode2}${randomCode3}`;
-      console.log(orderNumber, "orderNumber");
-      return orderNumber;
+        '0'
+      )
+      const randomCode1 = Math.floor(Math.random() * 100)
+      const randomCode2 = Math.floor(Math.random() * 1000)
+      const randomCode3 = Math.floor(Math.random() * 1000)
+      const orderNumber = `${year}${month}${day}${hours}${minutes}${seconds}${milliseconds}${randomCode1}${randomCode2}${randomCode3}`
+      console.log(orderNumber, 'orderNumber')
+      return orderNumber
     },
     handleButtonClick(label) {
-      if (label === "Confirm") {
-        if (this.inputAmount === "0.00") {
-          this.infoText = "valor válido";
-          return;
+      if (label === 'Confirm') {
+        if (this.inputAmount === '0.00') {
+          this.infoText = 'valor válido'
+          return
         } else {
-          this.validateAmount();
+          this.validateAmount()
         }
-      } else if (label === "Clear") {
-        this.isQueryEnabled = false;
-        this.infoText = "";
-        this.appSrc = "";
-        this.pix_path = "";
-        this.resetToDefault();
-      } else if (label === "Backspace") {
-        this.handleBackspace();
-      } else if (label === "Consulta") {
+      } else if (label === 'Clear') {
+        this.isQueryEnabled = false
+        this.infoText = ''
+        this.appSrc = ''
+        this.pix_path = ''
+        this.resetToDefault()
+      } else if (label === 'Backspace') {
+        this.handleBackspace()
+      } else if (label === 'Consulta') {
         // 调用查询接口
         getPayStatus({ pix_path: this.pix_path })
           .then((res) => {
             if (res.Payment == true) {
-              this.infoText = "Pago!!";
+              this.infoText = 'Pago!!'
             } else {
-              this.infoText = "Não Recebida.......";
+              this.infoText = 'Não Recebida.......'
             }
           })
-          .catch((error) => {});
+          .catch((error) => {})
       } else {
-        this.updateAmount(label);
+        this.updateAmount(label)
       }
     },
     updateAmount(label) {
       if (this.isFirstInput) {
-        this.isFirstInput = false;
-        this.inputAmount = "";
+        this.isFirstInput = false
+        this.inputAmount = ''
       }
 
-      if (label === ".") {
-        if (!this.inputAmount.includes(".")) {
-          this.inputAmount += ".";
+      if (label === '.') {
+        if (!this.inputAmount.includes('.')) {
+          this.inputAmount += '.'
         }
-      } else if (label === "0") {
-        if (this.inputAmount && this.inputAmount !== "0") {
-          this.inputAmount += label;
+      } else if (label === '0') {
+        if (this.inputAmount && this.inputAmount !== '0') {
+          this.inputAmount += label
         }
       } else {
-        if (this.inputAmount === "0.00" || this.inputAmount === "0") {
-          this.inputAmount = label;
+        if (this.inputAmount === '0.00' || this.inputAmount === '0') {
+          this.inputAmount = label
         } else {
-          const [integerPart, decimalPart] = this.inputAmount.split(".");
+          const [integerPart, decimalPart] = this.inputAmount.split('.')
           if (decimalPart) {
             if (decimalPart.length < 2) {
-              this.inputAmount += label;
+              this.inputAmount += label
             }
           } else {
-            this.inputAmount += label;
+            this.inputAmount += label
           }
         }
       }
 
-      if (this.inputAmount.includes(".")) {
-        const [integerPart, decimalPart] = this.inputAmount.split(".");
+      if (this.inputAmount.includes('.')) {
+        const [integerPart, decimalPart] = this.inputAmount.split('.')
         if (decimalPart && decimalPart.length > 2) {
-          this.inputAmount = `${integerPart}.${decimalPart.slice(0, 2)}`;
+          this.inputAmount = `${integerPart}.${decimalPart.slice(0, 2)}`
         }
       }
     },
     handleBackspace() {
       // 如果输入金额是 '0.00'，则不允许进行删除操作
-      if (this.inputAmount === "0.00") {
-        return;
+      if (this.inputAmount === '0.00') {
+        return
       }
 
       // 删除最后一个字符
       if (this.inputAmount.length > 0) {
-        this.inputAmount = this.inputAmount.slice(0, -1);
+        this.inputAmount = this.inputAmount.slice(0, -1)
 
         // 如果删除后金额为空或只剩下 '0'，则重置为 '0.00'
-        if (this.inputAmount === "" || this.inputAmount === ".") {
-          this.inputAmount = "0.00";
-        } else if (this.inputAmount.endsWith(".")) {
+        if (this.inputAmount === '' || this.inputAmount === '.') {
+          this.inputAmount = '0.00'
+        } else if (this.inputAmount.endsWith('.')) {
           // 如果剩余的金额以 '.' 结尾，删除它
-          this.inputAmount = this.inputAmount.slice(0, -1);
+          this.inputAmount = this.inputAmount.slice(0, -1)
         }
 
         // 保证金额不为空并且符合两位小数的规则
-        if (this.inputAmount === "" || this.inputAmount === ".") {
-          this.inputAmount = "0.00";
+        if (this.inputAmount === '' || this.inputAmount === '.') {
+          this.inputAmount = '0.00'
         }
       }
     },
     validateAmount() {
-      const amount = parseFloat(this.inputAmount).toFixed(2);
-      this.inputAmount = amount;
+      const amount = parseFloat(this.inputAmount).toFixed(2)
+      this.inputAmount = amount
       this.$nextTick(() => {
         // 调用方法获取二维码信息
-        this.loading = true; // 读条
-        var expirationMinutes = 60; // 默认过期时间60分钟
+        this.loading = true // 读条
+        var expirationMinutes = 60 // 默认过期时间60分钟
 
-        var curTime = new Date();
-        var posCurTime = new Date(curTime);
+        var curTime = new Date()
+        var posCurTime = new Date(curTime)
         // 增加分钟数
-        posCurTime.setMinutes(curTime.getMinutes() + this.value);
+        posCurTime.setMinutes(curTime.getMinutes() + this.value)
         // 计算当天的 23:59
-        var endOfDay = new Date(curTime);
-        endOfDay.setHours(23, 59, 0, 0); // 设置为当天的 23:59:00
+        var endOfDay = new Date(curTime)
+        endOfDay.setHours(23, 59, 0, 0) // 设置为当天的 23:59:00
         // 如果计算后的时间超过当天 23:59，则将时间设置为 23:59，并调整 this.value
         if (posCurTime > endOfDay) {
-          posCurTime = endOfDay;
+          posCurTime = endOfDay
 
           // 计算新的 this.value
-          expirationMinutes = Math.round((endOfDay - curTime) / 60000); // 转换为分钟
+          expirationMinutes = Math.round((endOfDay - curTime) / 60000) // 转换为分钟
         }
         this.expTime =
           posCurTime.getDate() +
-          "/" +
+          '/' +
           (posCurTime.getMonth() + 1) +
-          "   " +
+          '   ' +
           this.getZero(posCurTime.getHours()) +
-          ":" +
-          this.getZero(posCurTime.getMinutes());
+          ':' +
+          this.getZero(posCurTime.getMinutes())
         // 生成订单号
-        this.pedido = this.generateOrderNumber();
+        this.pedido = this.generateOrderNumber()
         // 调用payApi中的方法，生成pix信息
         addPay({
           payTotal: this.inputAmount,
           payNum: this.pedido,
-          payObs: "autopix",
-          payClient: "",
-          expiration: expirationMinutes,
+          payObs: 'autopix',
+          payClient: '',
+          expiration: expirationMinutes
         })
           .then((res) => {
-            this.calculateQrSize();
-            this.qrGenerated = true; // 在大小计算之后才生成二维码
+            this.calculateQrSize()
+            this.qrGenerated = true // 在大小计算之后才生成二维码
 
-            this.loading = false;
-            this.appSrc = res.data.pix_copy;
-            this.pix_path = res.data.pix_path;
+            this.loading = false
+            this.appSrc = res.data.pix_copy
+            this.pix_path = res.data.pix_path
           })
           .catch((error) => {
             // 请求失败后的处理
-            this.loading = false;
+            this.loading = false
           })
           .finally(() => {
-            this.loading = false;
-          });
+            this.loading = false
+          })
         // 调用Pix Api
         // 将pix信息渲染到二维码上
-      });
-      this.isQueryEnabled = true;
+      })
+      this.isQueryEnabled = true
     },
     resetToDefault() {
-      this.qrGenerated = false;
-      this.inputAmount = "0.00";
-      this.isFirstInput = true;
+      this.qrGenerated = false
+      this.inputAmount = '0.00'
+      this.isFirstInput = true
     },
     observeContainerSize() {
-      const defaultImage = this.$refs.defaultImage;
+      const defaultImage = this.$refs.defaultImage
 
       if (defaultImage) {
         const resizeObserver = new ResizeObserver((entries) => {
           for (const entry of entries) {
             if (entry.target === defaultImage) {
-              const containerWidth = entry.contentRect.width;
-              this.qrSize = containerWidth;
+              const containerWidth = entry.contentRect.width
+              this.qrSize = containerWidth
             }
           }
-        });
+        })
 
-        resizeObserver.observe(defaultImage);
+        resizeObserver.observe(defaultImage)
       }
     },
     calculateQrSize() {
-      const defaultImage = this.$refs.defaultImage;
+      const defaultImage = this.$refs.defaultImage
       if (defaultImage) {
-        this.qrSize = defaultImage.offsetWidth;
+        this.qrSize = defaultImage.offsetWidth
       }
-    },
-  },
-};
+    }
+  }
+}
 </script>
 
 <style scoped>
